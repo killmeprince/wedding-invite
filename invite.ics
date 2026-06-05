@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Azat Nastya Wedding//Invitation//RU
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:azat-nastya-wedding-20260731@example.local
+DTSTAMP:20260605T120000Z
+DTSTART:20260731T130000Z
+DTEND:20260731T210000Z
+SUMMARY:Свадьба Азата и Насти
+LOCATION:Видовое пространство «Много Неба», Крестовский остров, Южная дорога, 28
+DESCRIPTION:Сбор гостей в 16:00. Начало церемонии в 17:00.
+END:VEVENT
+END:VCALENDAR
