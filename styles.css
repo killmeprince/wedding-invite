@@ -155,18 +155,89 @@ p {
   text-transform: uppercase;
 }
 .monogram {
-  width: 96px;
-  height: 96px;
-  display: grid;
-  place-items: center;
-  margin: 0 auto 22px;
-  border: 1px solid rgba(201,168,106,.55);
+  position: relative;
+  width: 126px;
+  height: 126px;
+  flex: 0 0 126px;
+  margin: 0 auto 26px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   border-radius: 50%;
-  font-family: var(--serif);
-  font-size: 32px;
-  letter-spacing: -.08em;
+  box-sizing: border-box;
+  aspect-ratio: 1 / 1;
+
+  border: 1.5px solid rgba(201, 168, 106, 0.72);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 10px 30px rgba(0, 0, 0, 0.20);
 }
-.monogram span { color: var(--champagne); font-size: .72em; margin: 0 2px; }
+
+.monogram::before {
+  content: "";
+  position: absolute;
+  width: 126px;
+  height: 126px;
+  top: -8px;
+  left: 10px;
+  z-index: 0;
+
+  border-radius: 50%;
+  border: 1.5px solid rgba(201, 168, 106, 0.34);
+  pointer-events: none;
+}
+
+.monogram::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  z-index: 0;
+
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0.02) 28%,
+      transparent 52%
+    );
+  pointer-events: none;
+}
+
+.monogram-inner {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  line-height: 1;
+  transform: translateY(1px);
+}
+
+.monogram-letter {
+  display: block;
+  font-family: var(--serif);
+  font-size: 29px;
+  font-weight: 500;
+  line-height: 0.95;
+  color: var(--paper);
+}
+
+.monogram-amp {
+  display: block;
+  margin: 3px 0 2px;
+
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 0.9;
+  color: var(--champagne);
+}
 .gate-card h1 {
   margin-bottom: 8px;
   font-family: var(--serif);
@@ -517,21 +588,66 @@ p {
 .detail-card-dark h2 { color: var(--paper); }
 .palette {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 14px;
-  margin-top: 38px;
+  grid-template-columns: repeat(5, 82px);
+  justify-content: center;
+  align-items: start;
+  gap: 22px 24px;
+  margin-top: 30px;
 }
-.palette span { display: grid; gap: 14px; color: rgba(247,242,233,.7); font-size: 10px; letter-spacing: .08em; }
+
+.palette span {
+  --circle-size: 72px;
+
+  width: 82px;
+  min-width: 82px;
+
+  display: grid;
+  grid-template-rows: var(--circle-size) auto;
+  justify-items: center;
+  align-items: start;
+  row-gap: 13px;
+
+  position: relative;
+  padding: 0;
+  margin: 0;
+
+  color: rgba(247,242,233,.7);
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
 .palette span::before {
   content: "";
-  width: 100%;
-  aspect-ratio: 1;
+  width: var(--circle-size);
+  height: var(--circle-size);
+  display: block;
+
   border-radius: 50%;
   background: var(--swatch);
-  border: 1px solid rgba(255,255,255,.15);
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 10px 30px rgba(0,0,0,.18);
+
+  border: 1px solid rgba(239, 230, 216, 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 14px 32px rgba(0, 0, 0, 0.28);
 }
-.palette b { font-weight: 500; }
+
+.palette b {
+  width: 100%;
+  display: block;
+
+  margin: 0;
+  padding: 0;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: 0.045em;
+  text-align: center;
+  white-space: nowrap;
+
+  color: rgba(239, 230, 216, 0.9);
+}
 
 .rsvp-section {
   color: var(--paper);
@@ -683,84 +799,28 @@ fieldset input { accent-color: var(--champagne); }
   .button { width: 100%; padding: 0 18px; }
   .countdown strong { font-size: 34px; }
   .countdown span { letter-spacing: .12em; }
-  .palette { grid-template-columns: repeat(5, minmax(44px, 1fr)); gap: 8px; }
-  .calendar-card, .rsvp-form, .detail-card, .place-card, .contacts-card { border-radius: 26px; }
-  .calendar-head { font-size: 34px; }
-  .days span { min-height: 36px; }
-}
+  .monogram {
+    width: 110px;
+    height: 110px;
+    flex-basis: 110px;
+    margin-bottom: 22px;
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-  .reveal { opacity: 1; transform: none; }
-}
+  .monogram::before {
+    width: 110px;
+    height: 110px;
+    top: -7px;
+    left: 8px;
+  }
 
-/* === FIX: dress-code palette alignment === */
+  .monogram-letter {
+    font-size: 25px;
+  }
 
-.palette {
-  display: grid !important;
-  grid-template-columns: repeat(5, 82px);
-  justify-content: center;
-  align-items: start;
-  gap: 22px 24px;
-  margin-top: 30px;
-}
+  .monogram-amp {
+    font-size: 21px;
+  }
 
-.palette span {
-  --circle-size: 72px;
-
-  width: 82px;
-  min-width: 82px;
-
-  display: grid !important;
-  grid-template-rows: var(--circle-size) auto;
-  justify-items: center;
-  align-items: start;
-  row-gap: 13px;
-
-  position: relative;
-  padding: 0 !important;
-  margin: 0 !important;
-
-  background: none !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-.palette span::before {
-  content: "";
-  width: var(--circle-size);
-  height: var(--circle-size);
-  display: block;
-
-  border-radius: 50%;
-  background: var(--swatch);
-
-  border: 1px solid rgba(239, 230, 216, 0.2);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 14px 32px rgba(0, 0, 0, 0.28);
-}
-
-.palette span b {
-  width: 100%;
-  display: block;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  font-family: var(--font-ui, "Inter", Arial, sans-serif);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: 0.045em;
-  text-align: center;
-  white-space: nowrap;
-
-  color: rgba(239, 230, 216, 0.9);
-}
-
-@media (max-width: 560px) {
   .palette {
     grid-template-columns: repeat(3, 78px);
     gap: 24px 18px;
@@ -772,14 +832,21 @@ fieldset input { accent-color: var(--champagne); }
     min-width: 78px;
   }
 
-  .palette span b {
+  .palette b {
     font-size: 11px;
     letter-spacing: 0.035em;
   }
+  .calendar-card, .rsvp-form, .detail-card, .place-card, .contacts-card { border-radius: 26px; }
+  .calendar-head { font-size: 34px; }
+  .days span { min-height: 36px; }
 }
 
 @media (max-width: 360px) {
-  .palette {
-    grid-template-columns: repeat(2, 82px);
-  }
+  .palette { grid-template-columns: repeat(2, 82px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
 }
