@@ -24,10 +24,9 @@ function normalizePayload(payload) {
     ? payload.drinks.map((item) => String(item).trim()).filter(Boolean).slice(0, 10)
     : [];
   const comment = String(payload.comment || '').trim().slice(0, 600);
-  const page = String(payload.page || '').trim().slice(0, 300);
   const submittedAt = String(payload.submittedAt || new Date().toISOString()).trim().slice(0, 80);
 
-  return { fullName, attendance, drinks, comment, page, submittedAt };
+  return { fullName, attendance, drinks, comment, submittedAt };
 }
 
 function validate(payload) {
@@ -51,10 +50,8 @@ function buildMessage(payload, request) {
     `<b>Напитки:</b> ${escapeHtml(drinks)}`,
     `<b>Комментарий:</b> ${escapeHtml(comment)}`,
     '',
-    `<b>Страница:</b> ${escapeHtml(payload.page || 'не указано')}`,
     `<b>Время:</b> ${escapeHtml(payload.submittedAt)}`,
     `<b>IP:</b> ${escapeHtml(ip)}`,
-    `<b>UA:</b> ${escapeHtml(userAgent.slice(0, 180))}`,
   ].join('\n');
 }
 
