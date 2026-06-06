@@ -1,4 +1,7 @@
-const weddingDate = new Date('2026-07-31T16:00:00+03:00');
+// 31 июля 2026, 16:00 по Санкт-Петербургу.
+// Санкт-Петербург = UTC+3, поэтому абсолютное время: 13:00 UTC.
+const weddingDate = new Date('2026-07-31T13:00:00.000Z');
+
 const state = {
   musicStarted: false,
   muted: false,
@@ -12,36 +15,57 @@ function pad(value) {
 }
 
 function updateCountdown() {
+  const daysEl = $('[data-days]');
+  const hoursEl = $('[data-hours]');
+  const minutesEl = $('[data-minutes]');
+  const secondsEl = $('[data-seconds]');
+
+  if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+    return;
+  }
+
   const diff = Math.max(0, weddingDate.getTime() - Date.now());
   const totalSeconds = Math.floor(diff / 1000);
+
   const days = Math.floor(totalSeconds / 86400);
   const hours = Math.floor((totalSeconds % 86400) / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
 
-  $('[data-days]').textContent = pad(days);
-  $('[data-hours]').textContent = pad(hours);
-  $('[data-minutes]').textContent = pad(minutes);
-  $('[data-seconds]').textContent = pad(seconds);
+  daysEl.textContent = pad(days);
+  hoursEl.textContent = pad(hours);
+  minutesEl.textContent = pad(minutes);
+  secondsEl.textContent = pad(seconds);
 }
 
 function renderCalendar() {
   const grid = $('#calendarDays');
-  const blanks = 2; // July 1, 2026 is Wednesday; calendar starts Monday.
+
+  if (!grid) {
+    return;
+  }
+
+  grid.innerHTML = '';
+
+  const blanks = 2; // 1 июля 2026 — среда, календарь начинается с понедельника.
   const days = 31;
   const fragment = document.createDocumentFragment();
 
   for (let i = 0; i < blanks; i += 1) {
     const span = document.createElement('span');
     span.className = 'muted';
-    span.textContent = '0';
+    span.textContent = '';
     fragment.appendChild(span);
   }
 
   for (let day = 1; day <= days; day += 1) {
     const span = document.createElement('span');
-    span.textContent = day;
-    if (day === 31) span.className = 'wedding-day';
+    span.textContent = String(day);
+
+    if (day === 31) {
+      span.className = 'wedding-day';
+    }
+
     fragment.appendChild(span);
   }
 
@@ -50,14 +74,28 @@ function renderCalendar() {
 
 function setupReveal() {
   const items = $$('.reveal');
+
+  if (!items.length) {
+    return;
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    items.forEach((item) => item.classList.add('is-visible'));
+    return;
+  }
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
+      if (!entry.isIntersecting) {
+        return;
       }
+
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
     });
-  }, { threshold: 0.14 });
+  }, {
+    threshold: 0.14,
+  });
 
   items.forEach((item) => observer.observe(item));
 }
@@ -69,27 +107,43 @@ function setupMusic() {
   const toggle = $('#soundToggle');
   const icon = $('#soundIcon');
 
+  if (!gate || !open || !audio || !toggle || !icon) {
+    return;
+  }
+
   document.body.classList.add('locked');
+
+  const setMutedUi = () => {
+    state.muted = true;
+    toggle.classList.add('is-muted');
+    icon.textContent = '×';
+  };
+
+  const setPlayingUi = () => {
+    state.musicStarted = true;
+    state.muted = false;
+    toggle.classList.remove('is-muted');
+    icon.textContent = '♪';
+  };
 
   const tryPlay = async () => {
     try {
       audio.volume = 0.42;
+      audio.muted = false;
+
       await audio.play();
-      state.musicStarted = true;
-      state.muted = false;
-      toggle.classList.remove('is-muted');
-      icon.textContent = '♪';
-    } catch (error) {
+
+      setPlayingUi();
+    } catch {
       state.musicStarted = false;
-      state.muted = true;
-      toggle.classList.add('is-muted');
-      icon.textContent = '×';
+      setMutedUi();
     }
   };
 
   open.addEventListener('click', async () => {
     gate.classList.add('is-hidden');
     document.body.classList.remove('locked');
+
     await tryPlay();
   });
 
@@ -98,28 +152,46 @@ function setupMusic() {
       await tryPlay();
       return;
     }
+
     audio.pause();
-    state.muted = true;
-    toggle.classList.add('is-muted');
-    icon.textContent = '×';
+    setMutedUi();
   });
 }
 
 function setupCursorLight() {
   const light = $('.cursor-light');
+
+  if (!light) {
+    return;
+  }
+
   window.addEventListener('pointermove', (event) => {
     light.style.left = `${event.clientX}px`;
     light.style.top = `${event.clientY}px`;
-  }, { passive: true });
+  }, {
+    passive: true,
+  });
 }
 
 function setupCopyAddress() {
-  $('#copyAddress').addEventListener('click', async () => {
-    const text = $('#addressText').textContent.trim();
+  const copyButton = $('#copyAddress');
+  const address = $('#addressText');
+
+  if (!copyButton || !address) {
+    return;
+  }
+
+  copyButton.addEventListener('click', async () => {
+    const text = address.textContent.trim();
+
     try {
       await navigator.clipboard.writeText(text);
-      $('#copyAddress').textContent = 'Адрес скопирован';
-      setTimeout(() => { $('#copyAddress').textContent = 'Скопировать адрес'; }, 1800);
+
+      copyButton.textContent = 'Адрес скопирован';
+
+      setTimeout(() => {
+        copyButton.textContent = 'Скопировать адрес';
+      }, 1800);
     } catch {
       window.prompt('Скопируйте адрес:', text);
     }
@@ -128,11 +200,11 @@ function setupCopyAddress() {
 
 function getFormPayload(form) {
   const formData = new FormData(form);
-  const drinks = formData.getAll('drinks');
+
   return {
     fullName: String(formData.get('fullName') || '').trim(),
     attendance: String(formData.get('attendance') || '').trim(),
-    drinks,
+    drinks: formData.getAll('drinks'),
     comment: String(formData.get('comment') || '').trim(),
     website: String(formData.get('website') || '').trim(),
     page: window.location.href,
@@ -141,9 +213,18 @@ function getFormPayload(form) {
 }
 
 function validatePayload(payload) {
-  if (payload.website) return 'spam';
-  if (payload.fullName.length < 3) return 'Укажите, пожалуйста, ФИО.';
-  if (!payload.attendance) return 'Выберите, сможете ли вы присутствовать.';
+  if (payload.website) {
+    return 'spam';
+  }
+
+  if (payload.fullName.length < 3) {
+    return 'Укажите, пожалуйста, ФИО.';
+  }
+
+  if (!payload.attendance) {
+    return 'Выберите, сможете ли вы присутствовать.';
+  }
+
   return '';
 }
 
@@ -152,12 +233,20 @@ function setupForm() {
   const status = $('#formStatus');
   const submit = $('#submitButton');
 
+  if (!form || !status || !submit) {
+    return;
+  }
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const payload = getFormPayload(form);
     const error = validatePayload(payload);
-    if (error === 'spam') return;
+
+    if (error === 'spam') {
+      return;
+    }
+
     if (error) {
       status.textContent = error;
       status.className = 'form-status err';
@@ -166,25 +255,30 @@ function setupForm() {
 
     submit.disabled = true;
     submit.textContent = 'Отправляем…';
+
     status.textContent = '';
     status.className = 'form-status';
 
     try {
       const response = await fetch('/api/rsvp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(payload),
       });
 
       const result = await response.json().catch(() => ({}));
+
       if (!response.ok || !result.ok) {
         throw new Error(result.error || 'Не удалось отправить анкету');
       }
 
       form.reset();
+
       status.textContent = 'Спасибо. Анкета отправлена организаторам.';
       status.className = 'form-status ok';
-    } catch (error) {
+    } catch {
       status.textContent = 'Не получилось отправить. Попробуйте ещё раз или напишите организатору в Telegram.';
       status.className = 'form-status err';
     } finally {
@@ -196,6 +290,7 @@ function setupForm() {
 
 updateCountdown();
 setInterval(updateCountdown, 1000);
+
 renderCalendar();
 setupReveal();
 setupMusic();
