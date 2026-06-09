@@ -29,7 +29,10 @@
   --radius-lg: 26px;
   --radius-md: 18px;
 
-  --section-separator: clamp(16px, 2vw, 24px);
+  --section-y: clamp(82px, 8vw, 118px);
+  --section-band-height: clamp(76px, 7.2vw, 118px);
+  --display-size: clamp(58px, 7.2vw, 96px);
+  --body-size: clamp(16px, 1.28vw, 20px);
 }
 
 * {
@@ -133,11 +136,26 @@ main {
 
 .section {
   position: relative;
-  padding: clamp(82px, 8vw, 118px) 0;
+  padding: var(--section-y) 0;
 }
 
-main > section.section:not(.hero) {
-  border-top: var(--section-separator) solid var(--olive);
+main > section.section > .container {
+  position: relative;
+  z-index: 1;
+}
+
+main > section.section:not(.hero):not(.invite-letter) {
+  padding-top: calc(var(--section-band-height) + var(--section-y));
+}
+
+main > section.section:not(.hero):not(.invite-letter)::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  height: var(--section-band-height);
+  background: linear-gradient(135deg, var(--olive-black), var(--olive-deep), var(--olive));
+  box-shadow: 0 20px 56px rgba(16, 27, 15, 0.16);
 }
 
 h1,
@@ -147,7 +165,7 @@ blockquote {
   margin: 0;
   font-family: var(--serif);
   font-weight: 500;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.045em;
   color: var(--ink);
 }
 
@@ -159,9 +177,9 @@ p {
 .gate-kicker,
 .date-line,
 .countdown-title {
-  margin: 0 0 20px;
+  margin: 0 0 24px;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.2;
   letter-spacing: 0.34em;
   text-transform: uppercase;
@@ -174,9 +192,10 @@ p {
 .detail-card h2,
 .place-card h2,
 .contacts-card h2 {
-  max-width: 860px;
-  font-size: clamp(54px, 7.2vw, 96px);
-  line-height: 0.94;
+  max-width: 880px;
+  font-size: var(--display-size);
+  line-height: 0.92;
+  font-weight: 500;
 }
 
 .section-copy p,
@@ -187,11 +206,15 @@ p {
 .place-address,
 .place-name,
 .hero-text {
-  max-width: 640px;
+  max-width: 660px;
   margin-top: 24px;
-  font-size: clamp(16px, 1.35vw, 20px);
+  font-size: var(--body-size);
   line-height: 1.72;
   color: var(--ink-soft);
+}
+
+.section-copy .button {
+  margin-top: 34px;
 }
 
 .button {
@@ -525,10 +548,12 @@ p {
 .countdown-band {
   position: relative;
   z-index: 3;
-  padding: 28px 0;
+  min-height: var(--section-band-height);
+  display: flex;
+  align-items: center;
+  padding: 0;
   color: var(--cream-light);
-  background:
-    linear-gradient(135deg, var(--olive-black), var(--olive-deep), var(--olive));
+  background: linear-gradient(135deg, var(--olive-black), var(--olive-deep), var(--olive));
   box-shadow: 0 20px 56px rgba(16, 27, 15, 0.16);
 }
 
@@ -575,20 +600,20 @@ p {
 
 /* Invite */
 .invite-letter {
+  padding-block: clamp(72px, 6.4vw, 100px);
   text-align: center;
   background:
     linear-gradient(180deg, var(--cream), var(--cream-soft));
 }
 
 .invite-letter .eyebrow {
-  margin-bottom: 24px;
+  margin-bottom: 26px;
 }
 
 .invite-letter h2 {
   max-width: 840px;
   margin-inline: auto;
-  font-size: clamp(58px, 7.6vw, 98px);
-  line-height: 0.94;
+  font-style: italic;
 }
 
 .invite-letter p:not(.eyebrow) {
@@ -696,6 +721,10 @@ p {
     linear-gradient(135deg, var(--olive-black) 0%, var(--olive-deep) 50%, var(--olive) 100%);
 }
 
+.program-section::before {
+  background: linear-gradient(135deg, var(--olive-black), var(--olive-deep), var(--olive));
+}
+
 .program-section .eyebrow {
   color: rgba(255, 250, 241, 0.68);
 }
@@ -767,19 +796,14 @@ p {
 
 .place-card {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.82fr);
-  gap: clamp(34px, 6vw, 76px);
+  grid-template-columns: minmax(0, 0.92fr) minmax(420px, 1fr);
+  gap: clamp(40px, 6vw, 82px);
   align-items: center;
-  padding: clamp(32px, 5vw, 58px);
+  padding: clamp(34px, 5vw, 62px);
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
-  background: rgba(255, 250, 241, 0.88);
+  background: rgba(255, 250, 241, 0.9);
   box-shadow: var(--shadow-soft);
-}
-
-.place-copy h2 {
-  font-size: clamp(56px, 6.4vw, 88px);
-  line-height: 0.94;
 }
 
 .place-name {
@@ -799,7 +823,7 @@ p {
 }
 
 .map-frame {
-  min-height: 340px;
+  min-height: 390px;
   height: 100%;
   overflow: hidden;
   border-radius: 28px;
@@ -813,7 +837,7 @@ p {
 .map-frame iframe {
   width: 100%;
   height: 100%;
-  min-height: 340px;
+  min-height: 390px;
   display: block;
   border: 0;
   filter: saturate(0.72) contrast(0.96) brightness(1.03);
@@ -832,11 +856,11 @@ p {
 }
 
 .detail-card {
-  min-height: 520px;
+  min-height: 560px;
   padding: clamp(30px, 5vw, 58px);
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
-  background: rgba(255, 250, 241, 0.86);
+  background: rgba(255, 250, 241, 0.88);
   box-shadow: var(--shadow-soft);
 }
 
@@ -990,14 +1014,14 @@ fieldset {
 
 fieldset legend {
   display: block;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 
 fieldset > label {
   display: flex;
   align-items: flex-start;
-  gap: 11px;
-  margin-top: 12px;
+  gap: 12px;
+  margin-top: 16px;
   color: var(--ink-soft);
   line-height: 1.45;
 }
@@ -1009,13 +1033,13 @@ fieldset > label:first-of-type {
 .checks {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px 18px;
+  gap: 16px 20px;
 }
 
 .checks label {
   display: flex;
   align-items: flex-start;
-  gap: 11px;
+  gap: 12px;
   color: var(--ink-soft);
   line-height: 1.45;
 }
@@ -1057,11 +1081,16 @@ input[type="checkbox"] {
 }
 
 .contacts-card {
-  padding: clamp(30px, 5vw, 58px);
+  padding: clamp(34px, 5vw, 64px);
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
   background: rgba(255, 250, 241, 0.88);
   box-shadow: var(--shadow-soft);
+}
+
+.contacts-card h2,
+.footer blockquote {
+  font-style: italic;
 }
 
 .contact-line {
@@ -1176,6 +1205,7 @@ input[type="checkbox"] {
   .countdown-wrap {
     align-items: flex-start;
     flex-direction: column;
+    padding-block: 24px;
   }
 
   .timeline {
@@ -1202,6 +1232,10 @@ input[type="checkbox"] {
     padding: 74px 0;
   }
 
+  main > section.section:not(.hero):not(.invite-letter) {
+    padding-top: calc(var(--section-band-height) + 74px);
+  }
+
   .section-copy h2,
   .section-heading h2,
   .invite-letter h2,
@@ -1209,7 +1243,7 @@ input[type="checkbox"] {
   .place-card h2,
   .contacts-card h2 {
     font-size: clamp(46px, 15vw, 72px);
-    line-height: 0.96;
+    line-height: 0.94;
   }
 
   .hero-title {
