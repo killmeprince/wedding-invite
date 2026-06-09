@@ -94,12 +94,7 @@ function validate(rawPayload, payload) {
 }
 
 function buildMessage(payload, request) {
-  const ip =
-    request.headers.get("CF-Connecting-IP") ||
-    request.headers.get("X-Forwarded-For") ||
-    "unknown";
 
-  const userAgent = request.headers.get("User-Agent") || "unknown";
   const drinks = payload.drinks.length ? payload.drinks.join(", ") : "не указано";
   const comment = payload.comment || "нет";
 
@@ -112,8 +107,6 @@ function buildMessage(payload, request) {
     `<b>Комментарий:</b> ${escapeHtml(comment)}`,
     "",
     `<b>Время:</b> ${escapeHtml(payload.submittedAt)}`,
-    `<b>IP:</b> ${escapeHtml(ip)}`,
-    `<b>User-Agent:</b> ${escapeHtml(userAgent.slice(0, 180))}`,
   ].join("\n");
 }
 
