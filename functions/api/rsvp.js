@@ -1,161 +1,212 @@
-const MAX_TEXT_LENGTH = 3500;
+const ALLOWED_ORIGINS = new Set([
+  "https://killmeprince.github.io",
+  "https://killmeprince.github.io/wedding-invitation",
+  "https://killmeprince.github.io/svadba",
+]);
 
-function escapeHtml(value) {
-  return String(value ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;');
+function isAllowedOrigin(origin) {
+  if (!origin) return false;
+
+  try {
+    const url = new URL(origin);
+
+    if (ALLOWED_ORIGINS.has(origin)) {
+      return true;
+    }
+
+    return (
+      url.protocol === "https:" &&
+      (
+        url.hostname.endsWith(".pages.dev") ||
+        url.hostname === "pages.dev"
+      )
+    );
+  } catch {
+    return false;
+  }
 }
 
-function jsonResponse(body, status = 200) {
-  return new Response(JSON.stringify(body), {
+function corsHeaders(request) {
+  const origin = request.headers.get("Origin");
+
+  return {
+    "Access-Control-Allow-Origin": isAllowedOrigin(origin)
+      ? origin
+      : "https://killmeprince.github.io",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Max-Age": "86400",
+    "Vary": "Origin",
+  };
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function json(data, status = 200, request) {
+  return new Response(JSON.stringify(data), {
     status,
     headers: {
-      'Content-Type': 'application/json; charset=utf-8',
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      ...(request ? corsHeaders(request) : {}),
     },
   });
 }
 
-function normalizeDrinks(drinks) {
-  if (!Array.isArray(drinks)) {
-    return [];
-  }
+function normalizePayload(payload) {
+  const fullName = String(payload.fullName || "").trim().slice(0, 120);
+  const attendance = String(payload.attendance || "").trim().slice(0, 80);
 
-  return drinks
-    .map((drink) => String(drink || '').trim())
-    .filter(Boolean);
+  const drinks = Array.isArray(payload.drinks)
+    ? payload.drinks
+        .map((item) => String(item).trim())
+        .filter(Boolean)
+        .slice(0, 10)
+    : [];
+
+  const comment = String(payload.comment || "").trim().slice(0, 600);
+  const submittedAt = String(payload.submittedAt || new Date().toISOString())
+    .trim()
+    .slice(0, 80);
+
+  return {
+    fullName,
+    attendance,
+    drinks,
+    comment,
+    submittedAt,
+  };
 }
 
-function buildTelegramMessage(payload) {
-  const fullName = escapeHtml(payload.fullName);
-  const attendance = escapeHtml(payload.attendance);
-  const drinks = normalizeDrinks(payload.drinks);
-  const comment = escapeHtml(payload.comment || '—');
-  const page = escapeHtml(payload.page || '—');
-  const submittedAt = escapeHtml(payload.submittedAt || new Date().toISOString());
+function validate(rawPayload, payload) {
+  if (rawPayload.website) return "Spam rejected";
+  if (!payload.fullName || payload.fullName.length < 3) return "Full name is required";
+  if (!payload.attendance) return "Attendance is required";
 
-  const drinksText = drinks.length
-    ? drinks.map((drink) => `• ${escapeHtml(drink)}`).join('\n')
-    : '—';
-
-  const text = [
-    '💌 <b>Новая анкета гостя</b>',
-    '',
-    `👤 <b>ФИО:</b> ${fullName}`,
-    `✅ <b>Присутствие:</b> ${attendance}`,
-    '',
-    '<b>Напитки:</b>',
-    drinksText,
-    '',
-    `💬 <b>Комментарий:</b> ${comment}`,
-    '',
-    `🌐 <b>Страница:</b> ${page}`,
-    `🕒 <b>Отправлено:</b> ${submittedAt}`,
-  ].join('\n');
-
-  return text.slice(0, MAX_TEXT_LENGTH);
+  return "";
 }
 
-function validatePayload(payload) {
-  if (!payload || typeof payload !== 'object') {
-    return 'Некорректное тело запроса.';
-  }
-
-  if (String(payload.website || '').trim()) {
-    return 'spam';
-  }
-
-  if (String(payload.fullName || '').trim().length < 3) {
-    return 'Укажите ФИО.';
-  }
-
-  if (!String(payload.attendance || '').trim()) {
-    return 'Выберите, сможете ли вы присутствовать.';
-  }
-
-  return '';
+function buildMessage(payload, request) {
+  const drinks = payload.drinks.length ? payload.drinks.join(", ") : "не указано";
+  const comment = payload.comment || "нет";
+  return [
+    "💌 <b>Новая анкета гостя</b>",
+    "",
+    `<b>ФИО:</b> ${escapeHtml(payload.fullName)}`,
+    `<b>Присутствие:</b> ${escapeHtml(payload.attendance)}`,
+    `<b>Напитки:</b> ${escapeHtml(drinks)}`,
+    `<b>Комментарий:</b> ${escapeHtml(comment)}`,
+    "",
+    `<b>Время:</b> ${escapeHtml(payload.submittedAt)}`,
+  ].join("\n");
 }
 
-async function sendTelegramMessage(env, text) {
-  const token = env.TELEGRAM_BOT_TOKEN;
-  const chatId = env.TELEGRAM_CHAT_ID;
-  const threadId = env.TELEGRAM_THREAD_ID;
+export async function onRequestOptions({ request }) {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders(request),
+  });
+}
 
-  if (!token) {
-    throw new Error('Missing TELEGRAM_BOT_TOKEN');
+export async function onRequestPost({ request, env }) {
+  if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) {
+    return json(
+      {
+        ok: false,
+        error: "Telegram env vars are not configured",
+      },
+      500,
+      request
+    );
   }
 
-  if (!chatId) {
-    throw new Error('Missing TELEGRAM_CHAT_ID');
+  let rawPayload;
+
+  try {
+    rawPayload = await request.json();
+  } catch {
+    return json(
+      {
+        ok: false,
+        error: "Invalid JSON",
+      },
+      400,
+      request
+    );
   }
 
-  const body = {
-    chat_id: chatId,
-    text,
-    parse_mode: 'HTML',
+  const payload = normalizePayload(rawPayload);
+  const validationError = validate(rawPayload, payload);
+
+  if (validationError) {
+    return json(
+      {
+        ok: false,
+        error: validationError,
+      },
+      400,
+      request
+    );
+  }
+
+  const telegramBody = {
+    chat_id: env.TELEGRAM_CHAT_ID,
+    text: buildMessage(payload, request),
+    parse_mode: "HTML",
     disable_web_page_preview: true,
   };
 
-  if (threadId) {
-    body.message_thread_id = Number(threadId);
+  if (env.TELEGRAM_THREAD_ID) {
+    telegramBody.message_thread_id = Number(env.TELEGRAM_THREAD_ID);
   }
 
-  const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const telegramResponse = await fetch(
+    `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(telegramBody),
+    }
+  );
+
+  if (!telegramResponse.ok) {
+    const text = await telegramResponse.text();
+
+    return json(
+      {
+        ok: false,
+        error: `Telegram error: ${text.slice(0, 220)}`,
+      },
+      502,
+      request
+    );
+  }
+
+  return json(
+    {
+      ok: true,
     },
-    body: JSON.stringify(body),
-  });
-
-  const result = await response.json().catch(() => null);
-
-  if (!response.ok || !result?.ok) {
-    const migrateToChatId = result?.parameters?.migrate_to_chat_id;
-
-    if (migrateToChatId) {
-      throw new Error(
-        `Telegram group migrated. Replace TELEGRAM_CHAT_ID with: ${migrateToChatId}`
-      );
-    }
-
-    throw new Error(`Telegram error: ${JSON.stringify(result)}`);
-  }
-
-  return result;
+    200,
+    request
+  );
 }
 
-export async function onRequestPost(context) {
-  try {
-    const payload = await context.request.json();
-
-    const validationError = validatePayload(payload);
-
-    if (validationError === 'spam') {
-      return jsonResponse({ ok: true });
-    }
-
-    if (validationError) {
-      return jsonResponse({ ok: false, error: validationError }, 400);
-    }
-
-    const message = buildTelegramMessage(payload);
-
-    await sendTelegramMessage(context.env, message);
-
-    return jsonResponse({ ok: true });
-  } catch (error) {
-    console.error('RSVP submit failed:', error);
-
-    return jsonResponse({
+export async function onRequestGet({ request }) {
+  return json(
+    {
       ok: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    }, 500);
-  }
-}
-
-export async function onRequestOptions() {
-  return new Response(null, {
-    status: 204,
-  });
+      error: "Method not allowed",
+    },
+    405,
+    request
+  );
 }
