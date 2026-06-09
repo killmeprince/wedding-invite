@@ -1403,3 +1403,12 @@ input[type="checkbox"] {
     min-width: 76px;
   }
 }
+
+.checks label.is-disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.checks label.is-disabled input {
+  cursor: not-allowed;
+}
