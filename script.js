@@ -204,6 +204,53 @@ function setupCopyAddress() {
   });
 }
 
+function setupDrinkRules() {
+  const drinkInputs = $$('input[name="drinks"]');
+
+  if (!drinkInputs.length) {
+    return;
+  }
+
+  const noAlcoholInput = drinkInputs.find((input) => input.value === 'Я не пью алкоголь');
+  const alcoholInputs = drinkInputs.filter((input) => input.value !== 'Я не пью алкоголь');
+
+  if (!noAlcoholInput) {
+    return;
+  }
+
+  const syncDrinksState = () => {
+    if (noAlcoholInput.checked) {
+      alcoholInputs.forEach((input) => {
+        input.checked = false;
+        input.disabled = true;
+        input.closest('label')?.classList.add('is-disabled');
+      });
+
+      return;
+    }
+
+    alcoholInputs.forEach((input) => {
+      input.disabled = false;
+      input.closest('label')?.classList.remove('is-disabled');
+    });
+  };
+
+  noAlcoholInput.addEventListener('change', syncDrinksState);
+
+  alcoholInputs.forEach((input) => {
+    input.addEventListener('change', () => {
+      if (!input.checked) {
+        return;
+      }
+
+      noAlcoholInput.checked = false;
+      syncDrinksState();
+    });
+  });
+
+  syncDrinksState();
+}
+
 function getFormPayload(form) {
   const formData = new FormData(form);
 
