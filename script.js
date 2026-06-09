@@ -351,4 +351,5 @@ setupReveal();
 setupMusic();
 setupCursorLight();
 setupCopyAddress();
+setupDrinkRules();
 setupForm();
