@@ -2,6 +2,12 @@
 // Санкт-Петербург = UTC+3, поэтому абсолютное время: 13:00 UTC.
 const weddingDate = new Date('2026-07-31T13:00:00.000Z');
 
+const CLOUDFLARE_RSVP_ENDPOINT = 'https://wedding-invite-2l6.pages.dev/api/rsvp';
+
+const RSVP_ENDPOINT = window.location.hostname.endsWith('github.io')
+  ? CLOUDFLARE_RSVP_ENDPOINT
+  : '/api/rsvp';
+
 const state = {
   musicStarted: false,
   muted: false,
@@ -47,7 +53,7 @@ function renderCalendar() {
 
   grid.innerHTML = '';
 
-  const blanks = 2; // 1 июля 2026 — среда, календарь начинается с понедельника.
+  const blanks = 2;
   const days = 31;
   const fragment = document.createDocumentFragment();
 
@@ -218,11 +224,11 @@ function validatePayload(payload) {
   }
 
   if (payload.fullName.length < 3) {
-    return 'Укажите, пожалуйста, ФИО.';
+    return 'Укажите, пожалуйста, ФИО';
   }
 
   if (!payload.attendance) {
-    return 'Выберите, сможете ли вы присутствовать.';
+    return 'Выберите, сможете ли вы присутствовать';
   }
 
   return '';
@@ -260,7 +266,7 @@ function setupForm() {
     status.className = 'form-status';
 
     try {
-      const response = await fetch('/api/rsvp', {
+      const response = await fetch(RSVP_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -276,10 +282,12 @@ function setupForm() {
 
       form.reset();
 
-      status.textContent = 'Спасибо. Анкета отправлена организаторам.';
+      status.textContent = 'Спасибо, анкета отправлена организаторам';
       status.className = 'form-status ok';
-    } catch {
-      status.textContent = 'Не получилось отправить. Попробуйте ещё раз или напишите организатору в Telegram.';
+    } catch (error) {
+      console.error('RSVP submit failed:', error);
+
+      status.textContent = 'Не получилось отправить, попробуйте ещё раз или напишите организатору в Telegram';
       status.className = 'form-status err';
     } finally {
       submit.disabled = false;
