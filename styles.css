@@ -850,3 +850,405 @@ fieldset input { accent-color: var(--champagne); }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal { opacity: 1; transform: none; }
 }
+/* =========================================================
+   LUXURY CREAM / SAGE GREEN THEME OVERRIDE
+   Вставить в самый конец styles.css
+   ========================================================= */
+
+:root {
+  --ink: #25301f;
+  --dark: #182315;
+  --deep: #11180f;
+
+  --paper: #fffaf1;
+  --cream: #f5ecdc;
+  --ivory: #fbf6ec;
+  --warm-cream: #ead9bd;
+
+  --sage: #4f5c3e;
+  --sage-dark: #28351f;
+  --sage-soft: #d9ddc9;
+
+  --champagne: #c9b07b;
+  --gold: #c6a363;
+
+  --muted: #6f745f;
+  --line: rgba(40, 53, 31, 0.16);
+}
+
+/* Общий фон сайта */
+html {
+  background: #f5ecdc;
+}
+
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 15% 8%, rgba(255, 250, 241, 0.96), transparent 34%),
+    radial-gradient(circle at 90% 22%, rgba(217, 221, 201, 0.58), transparent 30%),
+    linear-gradient(180deg, #fffaf1 0%, #f5ecdc 44%, #eef0df 100%);
+}
+
+/* Тонкая фактура, чтобы фон не был плоским */
+.grain {
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+}
+
+.cursor-light {
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 250, 241, 0.55),
+      rgba(217, 221, 201, 0.18) 38%,
+      transparent 66%
+    );
+}
+
+/* Стартовый экран */
+.entry-gate {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 250, 241, 0.96), transparent 38%),
+    linear-gradient(135deg, #f8efe2 0%, #e7dcc8 48%, #ccd3bd 100%);
+}
+
+.gate-card {
+  color: var(--ink);
+  background:
+    linear-gradient(145deg, rgba(255, 250, 241, 0.92), rgba(238, 230, 211, 0.84)),
+    url("assets/creamy.jpg");
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(79, 92, 62, 0.22);
+  box-shadow:
+    0 34px 90px rgba(37, 48, 31, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.gate-kicker,
+.eyebrow,
+.date-line,
+.countdown-title {
+  color: var(--sage);
+}
+
+.gate-card h1,
+.hero-title,
+.section h2,
+.footer-monogram,
+blockquote {
+  color: var(--ink);
+}
+
+/* Монограмма / кольца */
+.monogram {
+  border-color: rgba(198, 163, 99, 0.78);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.42),
+    0 18px 42px rgba(40, 53, 31, 0.16);
+}
+
+.monogram::before {
+  border-color: rgba(79, 92, 62, 0.34);
+}
+
+.monogram-letter {
+  color: var(--ink);
+}
+
+.monogram-amp {
+  color: var(--gold);
+}
+
+/* Кнопки */
+.button-dark,
+.button-gold {
+  color: #fffaf1;
+  background:
+    linear-gradient(135deg, #26341f 0%, #4f5c3e 100%);
+  border-color: rgba(255, 250, 241, 0.2);
+  box-shadow:
+    0 18px 38px rgba(40, 53, 31, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.button-dark:hover,
+.button-gold:hover {
+  background:
+    linear-gradient(135deg, #1d2917 0%, #5d6b4a 100%);
+}
+
+.button-light {
+  color: var(--sage-dark);
+  background: rgba(255, 250, 241, 0.84);
+  border: 1px solid rgba(79, 92, 62, 0.22);
+  box-shadow: 0 12px 28px rgba(40, 53, 31, 0.1);
+}
+
+/* Светлые карточки */
+.hero-card,
+.calendar-card,
+.place-card,
+.detail-card,
+.contacts-card,
+.rsvp-form {
+  color: var(--ink);
+  background:
+    linear-gradient(145deg, rgba(255, 250, 241, 0.94), rgba(245, 236, 220, 0.9));
+  border: 1px solid var(--line);
+  box-shadow:
+    0 24px 70px rgba(40, 53, 31, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+/* Тёмные акцентные блоки */
+.countdown-band,
+.detail-card-dark,
+.footer {
+  color: #fffaf1;
+  background:
+    radial-gradient(circle at 90% 0%, rgba(201, 176, 123, 0.16), transparent 34%),
+    linear-gradient(135deg, #121a10 0%, #26341f 48%, #4f5c3e 100%);
+}
+
+.detail-card-dark h2,
+.detail-card-dark p,
+.detail-card-dark .eyebrow,
+.countdown-band,
+.footer,
+.footer blockquote,
+.footer .footer-monogram {
+  color: #fffaf1;
+}
+
+.detail-card-dark .eyebrow {
+  color: rgba(255, 250, 241, 0.68);
+}
+
+/* Hero */
+.hero {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(217, 221, 201, 0.65), transparent 30%),
+    linear-gradient(180deg, #fffaf1 0%, #f5ecdc 100%);
+}
+
+.hero-text,
+.section-copy p,
+.invite-letter p,
+.detail-card p,
+.contacts-card p,
+.rsvp-section p,
+.place-address,
+.place-name {
+  color: rgba(37, 48, 31, 0.78);
+}
+
+/* Calendar */
+.calendar-head {
+  color: var(--sage-dark);
+  border-bottom-color: rgba(79, 92, 62, 0.18);
+}
+
+.calendar-grid span {
+  color: rgba(37, 48, 31, 0.76);
+}
+
+.calendar-grid .wedding-day,
+.wedding-day {
+  color: #fffaf1 !important;
+  background:
+    linear-gradient(135deg, #28351f, #647151);
+  box-shadow: 0 12px 26px rgba(40, 53, 31, 0.24);
+}
+
+.calendar-note {
+  color: var(--sage);
+}
+
+/* Timeline */
+.timeline-item {
+  border-color: rgba(79, 92, 62, 0.16);
+}
+
+.timeline-item time {
+  color: var(--sage);
+}
+
+.timeline-item h3 {
+  color: var(--ink);
+}
+
+.timeline-item p {
+  color: rgba(37, 48, 31, 0.72);
+}
+
+/* Place abstract map */
+.map-abstract {
+  background:
+    linear-gradient(145deg, rgba(255, 250, 241, 0.9), rgba(217, 221, 201, 0.65));
+  border-color: rgba(79, 92, 62, 0.16);
+}
+
+.map-abstract span {
+  background: rgba(79, 92, 62, 0.22);
+}
+
+.map-abstract i {
+  background: var(--sage);
+  box-shadow: 0 0 0 10px rgba(79, 92, 62, 0.16);
+}
+
+/* Form */
+.field span,
+fieldset legend {
+  color: var(--sage-dark);
+}
+
+input,
+textarea {
+  color: var(--ink);
+  background: rgba(255, 250, 241, 0.86);
+  border: 1px solid rgba(79, 92, 62, 0.18);
+}
+
+input:focus,
+textarea:focus {
+  border-color: rgba(79, 92, 62, 0.46);
+  box-shadow: 0 0 0 4px rgba(79, 92, 62, 0.12);
+}
+
+.checks label,
+fieldset > label {
+  color: rgba(37, 48, 31, 0.78);
+}
+
+/* Sound button */
+.sound-toggle {
+  color: #fffaf1;
+  background: rgba(40, 53, 31, 0.9);
+  border: 1px solid rgba(255, 250, 241, 0.22);
+}
+
+/* =========================================================
+   PALETTE WITH ASSET IMAGES
+   ========================================================= */
+
+.palette,
+.palette-materials {
+  width: fit-content;
+  max-width: 100%;
+
+  display: grid !important;
+  grid-template-columns: repeat(4, 76px);
+  justify-content: start;
+  align-items: start;
+
+  column-gap: 18px;
+  row-gap: 22px;
+
+  margin-top: 28px;
+}
+
+/* каждый цвет — самостоятельная колонка */
+.palette span,
+.palette-materials span {
+  --circle-size: 64px;
+
+  width: 76px;
+  min-width: 76px;
+
+  display: grid !important;
+  grid-template-rows: var(--circle-size) auto;
+  justify-items: center;
+  align-items: start;
+  row-gap: 12px;
+
+  position: relative;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* сам кружок-картинка */
+.palette span::before,
+.palette-materials span::before {
+  content: "";
+  display: block;
+
+  width: var(--circle-size);
+  height: var(--circle-size);
+  border-radius: 50%;
+
+  background-image: var(--swatch-img);
+  background-size: cover;
+  background-position: center;
+
+  border: 1px solid rgba(255, 250, 241, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    0 14px 30px rgba(0, 0, 0, 0.18);
+}
+
+/* подпись строго под своим кружком */
+.palette span b,
+.palette-materials span b {
+  width: 100%;
+  display: block;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-family: var(--sans, "Inter", Arial, sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.025em;
+  text-align: center;
+
+  color: rgba(255, 250, 241, 0.92);
+}
+
+/* чтобы палитра не растягивала тёмную карточку визуально */
+.detail-card-dark .palette {
+  margin-left: 0;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 640px) {
+  .palette,
+  .palette-materials {
+    grid-template-columns: repeat(2, 78px);
+    column-gap: 20px;
+    row-gap: 24px;
+  }
+
+  .palette span,
+  .palette-materials span {
+    --circle-size: 66px;
+    width: 78px;
+    min-width: 78px;
+  }
+}
+
+@media (max-width: 380px) {
+  .palette,
+  .palette-materials {
+    grid-template-columns: repeat(2, 72px);
+    column-gap: 16px;
+  }
+
+  .palette span,
+  .palette-materials span {
+    --circle-size: 62px;
+    width: 72px;
+    min-width: 72px;
+  }
+
+  .palette span b,
+  .palette-materials span b {
+    font-size: 10px;
+  }
+}
