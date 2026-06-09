@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f7f1e6" />
+  <meta name="theme-color" content="#f4ead7" />
   <meta name="description" content="Свадебное приглашение Азата и Насти — 31 июля 2026" />
   <meta property="og:title" content="MAKEEV'S FAMILY" />
   <meta property="og:description" content="31 июля 2026 · Видовое пространство «Многонеба»" />
@@ -12,9 +12,13 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
   <div class="grain" aria-hidden="true"></div>
   <div class="cursor-light" aria-hidden="true"></div>
@@ -34,7 +38,7 @@
       </div>
 
       <h1>Азат & Настя</h1>
-      <p>31 июля 2026 · Санкт‑Петербург</p>
+      <p>31 июля 2026 · Санкт-Петербург</p>
 
       <button class="button button-dark" id="openInvitation" type="button">
         Открыть приглашение
@@ -61,6 +65,7 @@
           <p class="hero-text">
             В нашей жизни предстоят счастливые перемены. Мы хотим, чтобы в этот день рядом с нами были самые близкие и дорогие для нас люди.
           </p>
+
           <div class="hero-actions">
             <a class="button button-dark" href="#rsvp">Подтвердить участие</a>
             <a class="button button-light" href="#place">Где нас найти</a>
@@ -82,6 +87,7 @@
     <section class="countdown-band" aria-label="До свадьбы осталось">
       <div class="container countdown-wrap">
         <span class="countdown-title">До начала свадьбы в 16:00 осталось</span>
+
         <div class="countdown" id="countdown">
           <div><strong data-days>00</strong><span>дней</span></div>
           <div><strong data-hours>00</strong><span>часов</span></div>
@@ -96,7 +102,8 @@
         <p class="eyebrow">Дорогие гости</p>
         <h2>Будем счастливы разделить этот день с вами</h2>
         <p>
-          Мы рады пригласить Вас стать свидетелями нашего торжества и разделить с нами самые яркие моменты. Ваше присутствие сделает этот день по‑настоящему тёплым и незабываемым.
+          Мы рады пригласить Вас стать свидетелями нашего торжества и разделить с нами самые яркие моменты.
+          Ваше присутствие сделает этот день по-настоящему тёплым и незабываемым.
         </p>
       </div>
     </section>
@@ -117,10 +124,13 @@
             <span>Июль</span>
             <strong>2026</strong>
           </div>
+
           <div class="calendar-grid weekdays">
             <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
           </div>
+
           <div class="calendar-grid days" id="calendarDays"></div>
+
           <p class="calendar-note">31 июля — день нашей свадьбы ♥</p>
         </div>
       </div>
@@ -163,20 +173,35 @@
 
     <section class="section place-section" id="place">
       <div class="container place-card reveal">
-        <div>
+        <div class="place-copy">
           <p class="eyebrow">Место торжества</p>
           <h2>Где нас найти</h2>
           <p class="place-name">Видовое пространство «Многонеба»</p>
           <p class="place-address" id="addressText">Крестовский остров, Южная дорога, 28</p>
+
           <div class="place-actions">
-            <a class="button button-dark" href="https://2gis.ru/spb/search/%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BD%D0%B5%D0%B1%D0%B0%2C%20%D0%B8%D0%B2%D0%B5%D0%BD%D1%82-%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%BA%D0%B0/firm/70000001113464451/30.214264%2C59.969788?m=30.214137%2C59.969671%2F18.6" target="_blank" rel="noreferrer">Карта</a>
-            <button class="button button-light" id="copyAddress" type="button">Скопировать адрес</button>
+            <a
+              class="button button-dark"
+              href="https://2gis.ru/spb/search/%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D0%BD%D0%B5%D0%B1%D0%B0%2C%20%D0%B8%D0%B2%D0%B5%D0%BD%D1%82-%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%BA%D0%B0/firm/70000001113464451/30.214264%2C59.969788?m=30.214137%2C59.969671%2F18.6"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Карта
+            </a>
+            <button class="button button-light" id="copyAddress" type="button">
+              Скопировать адрес
+            </button>
           </div>
         </div>
 
-        <div class="map-abstract" aria-hidden="true">
-          <span></span><span></span><span></span><span></span>
-          <i></i>
+        <div class="map-frame">
+          <iframe
+            title="Карта места торжества"
+            src="https://yandex.ru/map-widget/v1/?ll=30.214137%2C59.969671&z=16&pt=30.214137%2C59.969671%2Cpm2gnm"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
         </div>
       </div>
     </section>
@@ -190,7 +215,8 @@
             Дорогие гости, мы будем очень признательны, если вы не будете дарить нам живые цветы в день свадьбы.
           </p>
           <p>
-            Лучший подарок для нас — ваше присутствие. Если захотите нас порадовать, вложите свои тёплые пожелания в конверт: это станет самым ценным вкладом в наше совместное будущее.
+            Лучший подарок для нас — ваше присутствие. Если захотите нас порадовать, вложите свои тёплые пожелания
+            в конверт: это станет самым ценным вкладом в наше совместное будущее.
           </p>
         </article>
 
@@ -200,10 +226,18 @@
           <p>Будем признательны, если вы поддержите цветовую гамму нашей свадьбы.</p>
 
           <div class="palette palette-materials" aria-label="Цветовая палитра свадьбы">
-            <span class="swatch-cream" style="--swatch-img: url('assets/creamy.jpg');"><b>Кремовый</b></span>
-            <span class="swatch-ivory" style="--swatch-img: url('assets/creamy.jpg');"><b>Айвори</b></span>
-            <span class="swatch-sage" style="--swatch-img: url('assets/salad.jpg');"><b>Шалфей</b></span>
-            <span class="swatch-deep" style="--swatch-img: url('assets/salad.jpg');"><b>Тёмный зелёный</b></span>
+            <span style="--swatch-img: url('assets/black.jpg');">
+              <b>Чёрный</b>
+            </span>
+            <span style="--swatch-img: url('assets/brown.jpg');">
+              <b>Коричневый</b>
+            </span>
+            <span style="--swatch-img: url('assets/creamy.jpg');">
+              <b>Кремовый</b>
+            </span>
+            <span style="--swatch-img: url('assets/salad.jpg');">
+              <b>Оливковый</b>
+            </span>
           </div>
         </article>
       </div>
@@ -214,13 +248,23 @@
         <div class="section-copy reveal">
           <p class="eyebrow">Подтверждение участия</p>
           <h2>Анкета гостя</h2>
-          <p>Просим подтвердить своё присутствие до 20 июля 2026 года. После отправки ответ сразу придёт организаторам в Telegram.</p>
+          <p>
+            Просим подтвердить своё присутствие до 20 июля 2026 года.
+            После отправки ответ сразу придёт организаторам в Telegram.
+          </p>
         </div>
 
         <form class="rsvp-form reveal" id="rsvpForm">
           <label class="field">
             <span>ФИО</span>
-            <input type="text" name="fullName" placeholder="Фамилия Имя Отчество" autocomplete="name" required maxlength="120" />
+            <input
+              type="text"
+              name="fullName"
+              placeholder="Фамилия Имя Отчество"
+              autocomplete="name"
+              required
+              maxlength="120"
+            />
           </label>
 
           <label class="field honeypot" aria-hidden="true">
@@ -230,12 +274,21 @@
 
           <fieldset>
             <legend>Сможете ли вы присутствовать?</legend>
-            <label><input type="radio" name="attendance" value="С удовольствием приду" required><span>С удовольствием приду</span></label>
-            <label><input type="radio" name="attendance" value="К сожалению, не смогу присутствовать"><span>К сожалению, не смогу присутствовать</span></label>
+
+            <label>
+              <input type="radio" name="attendance" value="С удовольствием приду" required>
+              <span>С удовольствием приду</span>
+            </label>
+
+            <label>
+              <input type="radio" name="attendance" value="К сожалению, не смогу присутствовать">
+              <span>К сожалению, не смогу присутствовать</span>
+            </label>
           </fieldset>
 
           <fieldset>
             <legend>Что предпочитаете по напиткам?</legend>
+
             <div class="checks">
               <label><input type="checkbox" name="drinks" value="Белое вино"><span>Белое вино</span></label>
               <label><input type="checkbox" name="drinks" value="Красное вино"><span>Красное вино</span></label>
@@ -249,10 +302,18 @@
 
           <label class="field">
             <span>Комментарий</span>
-            <textarea name="comment" rows="4" placeholder="Например, если есть аллергия на что-либо" maxlength="600"></textarea>
+            <textarea
+              name="comment"
+              rows="4"
+              placeholder="Например, если есть аллергия на что-либо"
+              maxlength="600"
+            ></textarea>
           </label>
 
-          <button class="button button-gold" type="submit" id="submitButton">Отправить анкету</button>
+          <button class="button button-gold" type="submit" id="submitButton">
+            Отправить анкету
+          </button>
+
           <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -267,22 +328,28 @@
           <span>Организатор свадьбы</span>
           <strong>Анастасия</strong>
         </div>
+
         <div class="contact-line">
           <span>Телефон</span>
           <a href="tel:+79817594605">+7 (981) 759 46 05</a>
         </div>
+
         <div class="contact-line">
           <span>Telegram</span>
           <a href="https://t.me/NaastasiaAlexeeva" target="_blank" rel="noreferrer">@NaastasiaAlexeeva</a>
         </div>
 
-        <p class="contact-note">Если вы хотите сделать для нас сюрприз или уточнить детали торжества — свяжитесь, пожалуйста, с нашим организатором.</p>
+        <p class="contact-note">
+          Если вы хотите сделать для нас сюрприз или уточнить детали торжества — свяжитесь, пожалуйста, с нашим организатором.
+        </p>
       </div>
     </section>
 
     <footer class="footer">
       <div class="container footer-inner reveal">
-        <blockquote>«Счастье — это когда рядом с тобой тот, с кем хочется встречать каждый рассвет»</blockquote>
+        <blockquote>
+          «Счастье — это когда рядом с тобой тот, с кем хочется встречать каждый рассвет»
+        </blockquote>
         <div class="footer-monogram">Азат & Настя</div>
         <p>Азат & Настя · 31 июля 2026 · С любовью</p>
       </div>
